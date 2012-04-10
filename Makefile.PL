@@ -12,6 +12,11 @@ WriteMakefile(
         'Test::More' => 0,
         'version'    => 0,
     },
+    META_MERGE => {
+        resources => {
+            repository => 'https://github.com/mstratman/DateTime-Format-Human-Duration',
+        },
+    },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'DateTime-Format-Human-Duration-*' },
 );
