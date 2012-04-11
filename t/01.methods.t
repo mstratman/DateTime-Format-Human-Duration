@@ -17,49 +17,53 @@ SKIP: {
     eval 'use DateTime';
     skip 'DateTime required for creating DateTime object and durations', 22 if $@;
 
-    my $span = DateTime::Format::Human::Duration->new();
-    ok(ref $span eq 'DateTime::Format::Human::Duration', 'Obj creation');
+   #    Do setup
     my $time = time;
     my $dua = DateTime->from_epoch( 'epoch' => $time );
-    my $dub = DateTime->from_epoch( 'epoch' => ($time + 2), 'locale' => 'fr' );
-    my $duc = DateTime->from_epoch( 'epoch' => ($time + 63) );
-    my $dud = DateTime->from_epoch( 'epoch' => ($time + 3625.4455) );
-    my $due = DateTime->from_epoch( 'epoch' => ($time + 23775453.345) );
-    my $duf = DateTime->from_epoch( 'epoch' => ($time + 61) );
+    my $dub = DateTime->from_epoch( 'epoch' => $time, 'locale' => 'fr' )->add(seconds => 2);
+    my $duc = $dua->clone->add( minutes => 1, seconds => 3 );
+    my $dud = $dua->clone->add(hours => 1, seconds => 25, nanoseconds => 445499897);
+    my $due = $dua->clone->add(months => 9, days => 1, hours => 4, minutes => 17, seconds => 33, nanoseconds => 345000028);
+    my $duf = $dua->clone->add( minutes => 1, seconds => 1 );
+    
 
     my $dura = $dua - $dua;
-    # my $durb = $dua - $dub;
     my $durc = $dua - $dub;
     my $durd = $dub - $dua;
     my $dure = $dua - $duc;
     my $durf = $dua - $dud;
     my $durg = $dua - $due;
 
-    ok( $span->format_duration($dura) eq 'no time', 'No difference w/ default no_time');
-    ok( $span->format_duration($dura,  'no_time' => 'absolutely no time' ) eq 'absolutely no time', 'No difference w/ no_time');
-    ok( $span->format_duration($dura,  'no_time' => '' ) eq '', 'No difference w/ empty no_time');
-    ok( $span->format_duration($durc) eq '2 seconds', '1 value');
-    ok( $span->format_duration_between($dub, $dua) eq '2 seconds', 'Reverse/Negative is still positive (not "no time")');
-    ok( $span->format_duration_between($dua, $duf) eq '1 minute and 1 second', '2 (singular values)');
-    ok( $span->format_duration($dure) eq '1 minute and 3 seconds', '2 values (mixed)' );
-    ok( $span->format_duration($durf) eq '1 hour, 25 seconds, and 445499897 nanoseconds', '> 2 values (3)');
+   #    Start testing
+   my $span = DateTime::Format::Human::Duration->new();
+    isa_ok($span, 'DateTime::Format::Human::Duration');
 
-    ok( $span->format_duration($durg) eq '9 months, 1 day, 4 hours, 17 minutes, 33 seconds, and 345000028 nanoseconds', '> 2 values (5)');
+    is( $span->format_duration($dura), 'no time', 'No difference w/ default no_time');
+    is( $span->format_duration($dura,  'no_time' => 'absolutely no time' ), 'absolutely no time', 'No difference w/ no_time');
+    is( $span->format_duration($dura,  'no_time' => '' ), '', 'No difference w/ empty no_time');
+    is( $span->format_duration($durc), '2 seconds', '1 value');
+    is( $span->format_duration_between($dub, $dua), '2 seconds', 'Reverse/Negative is still positive (not "no time")');
+    is( $span->format_duration_between($dua, $duf), '1 minute and 1 second', '2 (singular values)');
+    is( $span->format_duration($dure), '1 minute and 3 seconds', '2 values (mixed)' );
+    is( $span->format_duration($durf), '1 hour, 25 seconds, and 445499897 nanoseconds', '> 2 values (3)');
 
-    ok( $span->format_duration($durc, 'future' => 'Hello, You have %s left') eq 'Hello, You have 2 seconds left', 'string with %s');
-    ok( $span->format_duration($durc, 'future' => 'You have') eq 'You have 2 seconds', 'string w/ out %s');
-    ok( $span->format_duration_between($dua, $dub) eq '2 seconds', 'DateTime object method format_duration_between()');
+    is( $span->format_duration($durg), '9 months, 1 day, 4 hours, 17 minutes, 33 seconds, and 345000028 nanoseconds', '> 2 values (5)');
 
-    ok( $span->format_duration_between($dua, $duc, 'past'=>'Was done %s ago.','future' => 'Will be done in %s.') eq 'Will be done in 1 minute and 3 seconds.','$a->format_duration_between($b): $a < $b = future');
-    ok( $span->format_duration_between($duc, $dua, 'past'=>'Was done %s ago.','future' => 'Will be done in %s.') eq 'Was done 1 minute and 3 seconds ago.','$a->format_duration_between($b): $a > $b = past');
+    is( $span->format_duration($durc, 'future' => 'Hello, You have %s left'), 'Hello, You have 2 seconds left', 'string with %s');
+    is( $span->format_duration($durc, 'future' => 'You have'), 'You have 2 seconds', 'string w/ out %s');
+    is( $span->format_duration_between($dua, $dub), '2 seconds', 'DateTime object method format_duration_between()');
 
-    ok( $span->format_duration_between( $duc, $duc->clone()->add('seconds'=> 62) ) eq '1 minute and 2 seconds', 'clone exmple');
-    ok( $span->format_duration( DateTime::Duration->new('seconds'=> 62) ) eq '62 seconds', 'Ambiguous duration (baseless)');
+    is( $span->format_duration_between($dua, $duc, 'past'=>'Was done %s ago.','future' => 'Will be done in %s.'), 'Will be done in 1 minute and 3 seconds.','$a->format_duration_between($b): $a < $b = future');
+    is( $span->format_duration_between($duc, $dua, 'past'=>'Was done %s ago.','future' => 'Will be done in %s.'), 'Was done 1 minute and 3 seconds ago.','$a->format_duration_between($b): $a > $b = past');
+
+    is( $span->format_duration_between( $duc, $duc->clone()->add('seconds'=> 62) ), '1 minute and 2 seconds', 'clone exmple');
+    is( $span->format_duration( DateTime::Duration->new('seconds'=> 62) ), '62 seconds', 'Ambiguous duration (baseless)');
 
     # test 'locale' key
-    ok( $span->format_duration($dure, 'locale' => 'fr') eq '1 minute et 3 seconds', 'locale key as string format_duration()');
-    ok( $span->format_duration($dure, 'locale' => $dub) eq '1 minute et 3 seconds', 'locale key as $DateTime obj format_duration()');
-    ok( $span->format_duration($dure, 'locale' => $dub->{'locale'}) eq '1 minute et 3 seconds', 'locale key as $DateTime->{\'locale\'} format_duration()');
-    ok( $span->format_duration_between($dub, $duc) eq '1 minute et 1 seconde', 'Object\'s locale used in format_duration_between()');
+    is( $span->format_duration($dure, 'locale' => 'fr'), '1 minute et 3 seconds', 'locale key as string format_duration()');
+    is( $span->format_duration($dure, 'locale' => $dub), '1 minute et 3 seconds', 'locale key as $DateTime obj format_duration()');
+    is( $span->format_duration($dure, 'locale' => $dub->{'locale'}), '1 minute et 3 seconds', 'locale key as $DateTime->{\'locale\'} format_duration()');
+    is( $span->format_duration_between($dub, $duc), '1 minute et 1 seconde', 'Object\'s locale used in format_duration_between()');
 
 };
+
