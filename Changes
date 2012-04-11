@@ -1,5 +1,8 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.4    ...
+       * Simplified version number scheme to ordinary decimal.
+
 0.0.3  Tue Apr 10 20:37:18 CDT 2012
        * Updated manifest - 0.0.2 was missing some needed files. Big whoops!
 

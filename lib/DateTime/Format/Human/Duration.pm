@@ -4,7 +4,7 @@ use warnings;
 use strict;
 require DateTime::Format::Human::Duration::Locale;
 
-use version; our $VERSION = qv('0.0.3');
+our $VERSION = '0.4';
 
 sub new {
     bless { 'locale_cache' => {} }, 'DateTime::Format::Human::Duration';  
