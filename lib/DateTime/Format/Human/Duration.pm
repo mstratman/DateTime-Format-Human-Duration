@@ -222,7 +222,8 @@ This facilitates, for example, this L<Locale::Maketext> vernacular which becomes
 
 Localization is provided by the included DateTime::Format::Human::Duration::Locale modules.
 
-Included are DateTime::Format::Human::Duration::Locale::es, DateTime::Format::Human::Duration::Locale::fr, DateTime::Format::Human::Duration::Locale::pt
+Included are DateTime::Format::Human::Duration::Locale::es, DateTime::Format::Human::Duration::Locale::fr, DateTime::Format::Human::Duration::Locale::pt,
+DateTime::Format::Human::Duration::Locale::de
 
 More will be included as time permits/folks volunteer/CLDR becomes an option
 
