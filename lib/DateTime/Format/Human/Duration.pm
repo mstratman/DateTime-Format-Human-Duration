@@ -124,10 +124,6 @@ __END__
 
 DateTime::Format::Human::Duration - Get a locale specific string describing the span of a given duration
 
-=head1 VERSION
-
-This document describes DateTime::Format::Human::Duration version 0.0.1
-
 =head1 SYNOPSIS
 
     use DateTime;
