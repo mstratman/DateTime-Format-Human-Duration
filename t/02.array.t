@@ -2,6 +2,9 @@ use Test::More;
 use lib 't/lib';
 use DateTime::Format::Human::Duration;
 use DateTime;
+use FindBin qw($Bin);
+use File::Spec;
+BEGIN { push @INC, File::Spec->catfile($Bin, 'lib'); }
 
 
 my $dta = DateTime->now( locale => 'nb' );

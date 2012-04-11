@@ -8,10 +8,12 @@ WriteMakefile(
     VERSION_FROM        => 'lib/DateTime/Format/Human/Duration.pm',
     ABSTRACT_FROM       => 'lib/DateTime/Format/Human/Duration.pm',
     PL_FILES            => {},
-    PREREQ_PM => {
+    BUILD_REQUIRES => {
         'Test::More' => 0,
-        'version'    => 0,
+        'File::Spec' => 0,
+        'FindBin'    => 0,
     },
+    PREREQ_PM => { },
     META_MERGE => {
         resources => {
             repository => 'https://github.com/mstratman/DateTime-Format-Human-Duration',

@@ -7,10 +7,12 @@ my $builder = Module::Build->new(
     license             => 'perl',
     dist_author         => 'Daniel Muey <http://drmuey.com/cpan_contact.pl>',
     dist_version_from   => 'lib/DateTime/Format/Human/Duration.pm',
-    requires => {
+    build_requires => {
         'Test::More' => 0,
-        'version'    => 0,
+        'File::Spec' => 0,
+        'FindBin'    => 0,
     },
+    requires => { },
     add_to_cleanup      => [ 'DateTime-Format-Human-Duration-*' ],
 );
 
