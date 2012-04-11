@@ -1,5 +1,19 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.0.2  Tue Apr 10 20:08:34 2012
+       * Put the project on github so others can more easily add new locales
+         or fix issues:
+         https://github.com/mstratman/DateTime-Format-Human-Duration
+       * Added .de locale (stefanos@cpan.org)
+         https://rt.cpan.org/Ticket/Display.html?id=66248
+       * Fix for bad second counting in test (david.storrs@gmail.com)
+         https://rt.cpan.org/Ticket/Display.html?id=66973
+       * Workaround applied to tests for counting issue:
+         https://rt.cpan.org/Ticket/Display.html?id=52920
+         https://rt.cpan.org/Ticket/Display.html?id=71260
+       * Added failing TODO test for outstanding issue:
+         https://rt.cpan.org/Ticket/Display.html?id=74923
+
 0.0.1  Sun Mar 16 10:54:08 2008
-       Initial release.
+       * Initial release.
 
