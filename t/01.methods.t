@@ -1,4 +1,4 @@
-use Test::More tests => 22;
+use Test::More;
 use lib '../lib';
 
 BEGIN {
@@ -6,12 +6,6 @@ BEGIN {
 }
 
 diag( "Testing DateTime::Format::Human::Duration $DateTime::Format::Human::Duration::VERSION" );
-
-# plan skip_all => 'DateTime required for creating DateTime object and durations' if $@;
-# That fails under Test::More 0.70 like so:
-#   You tried to plan twice at t/01.methods.t line 11.
-#   Looks like you planned 22 tests but only ran 1.
-#   Looks like your test died just after 1.
 
 SKIP: {
     eval 'use DateTime';
@@ -67,3 +61,4 @@ SKIP: {
 
 };
 
+done_testing();
