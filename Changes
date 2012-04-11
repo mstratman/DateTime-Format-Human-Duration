@@ -1,5 +1,8 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.0.3  Tue Apr 10 20:37:18 CDT 2012
+       * Updated manifest - 0.0.2 was missing some needed files. Big whoops!
+
 0.0.2  Tue Apr 10 20:08:34 2012
        * Put the project on github so others can more easily add new locales
          or fix issues:
