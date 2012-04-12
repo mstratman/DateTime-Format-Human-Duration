@@ -13,6 +13,7 @@ README
 t/00.load.t
 t/01.methods.t
 t/02.array.t
+t/lib/DateTime/Format/Human/Duration/Locale/nb.pm
 t/nb.pm
 t/perlcritic.t
 t/pod-coverage.t
