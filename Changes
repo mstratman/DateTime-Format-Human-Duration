@@ -1,7 +1,10 @@
 Revision history for DateTime-Format-Human-Duration
 
-0.4    ...
+0.4    Wed Apr 11 21:46:08 CDT 2012
        * Simplified version number scheme to ordinary decimal.
+       * Minor POD changes
+       * Fixed 02.array.t (hopefully) to actually use nb.pm and to 
+         pass when DateTime is not installed.
 
 0.0.3  Tue Apr 10 20:37:18 CDT 2012
        * Updated manifest - 0.0.2 was missing some needed files. Big whoops!
