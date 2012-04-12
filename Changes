@@ -1,5 +1,9 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.5    ...
+       * Added 'it' localization (Aldo Calpini <dada@perl.it>)
+         https://rt.cpan.org/Ticket/Display.html?id=76503
+
 0.4    Wed Apr 11 21:46:08 CDT 2012
        * Simplified version number scheme to ordinary decimal.
        * Minor POD changes
