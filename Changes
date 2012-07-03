@@ -1,6 +1,6 @@
 Revision history for DateTime-Format-Human-Duration
 
-0.5    ...
+0.5    Tue Jul  3 14:22:49 CDT 2012
        * Added 'it' localization (Aldo Calpini <dada@perl.it>)
          https://rt.cpan.org/Ticket/Display.html?id=76503
 
