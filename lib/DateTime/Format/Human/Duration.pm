@@ -120,6 +120,8 @@ sub format_duration {
 
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
 DateTime::Format::Human::Duration - Get a locale specific string describing the span of a given duration
