@@ -1,5 +1,9 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.52   Mon Jul 30 15:20:21 CDT 2012
+       * Skip one of the 01.methods.t tests until we can figure
+         out a way to properly test it.
+
 0.51   Thu Jul  5 08:35:45 CDT 2012
        * Moved author tests to xt to avoid failed installations.
 
