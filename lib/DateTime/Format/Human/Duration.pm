@@ -43,7 +43,7 @@ sub format_duration {
     }
     
     ####
-    ## this is essencially the hashref that is returned from DateTime::Format::Human::Duration::en::get_human_span_hashref() : #
+    ## this is essentially the hashref that is returned from DateTime::Format::Human::Duration::en::get_human_span_hashref() : #
     ####
     my $setup = {
         'no_oxford_comma' => 0,
