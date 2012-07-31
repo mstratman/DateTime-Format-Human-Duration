@@ -4,7 +4,7 @@ use warnings;
 use strict;
 require DateTime::Format::Human::Duration::Locale;
 
-our $VERSION = '0.52';
+our $VERSION = '0.60';
 
 use Carp qw/croak/;
 

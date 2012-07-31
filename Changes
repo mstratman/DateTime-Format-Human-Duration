@@ -1,5 +1,16 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.60   Tue Jul 31 13:42:37 CDT 2012
+       * Added 'units' and 'precision' arguments (Stephan <au@hcsd.de>)
+         https://rt.cpan.org/Ticket/Display.html?id=76497
+       * Deprecated get_human_span_from_units_array()
+       * Added get_human_span_from_units(), which should provide an
+         alternative to get_human_span_from_units_array(), allowing you
+         to determine whether the duration is positive or negative.
+         https://rt.cpan.org/Ticket/Display.html?id=74923
+         It also works correctly with 'units' and 'precision' whereas
+         get_human_span_from_units_array() would not.
+
 0.52   Mon Jul 30 15:20:21 CDT 2012
        * Skip one of the 01.methods.t tests until we can figure
          out a way to properly test it.
