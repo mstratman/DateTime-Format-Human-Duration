@@ -27,12 +27,4 @@ sub get_human_span_hashref {
     };
 }
 
-# get_human_span_from_units_array() is used instead of get_human_span_hashref() if get_human_span_from_units_array() exists
-# 
-# sub get_human_span_from_units_array {
-#    my ($years, $months, $weeks, $days, $hours, $minutes, $seconds, $nanoseconds, $args_hr) = @_; # note: has no negative numbers
-#    ...
-#    return $string; # 1 year, 2days, 4 hours, and 17 minutes
-# }
-
 1;

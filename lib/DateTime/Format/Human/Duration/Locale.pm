@@ -19,11 +19,16 @@ sub calc_locale {
         return $final if ref $final; # returned 'locale_cache' we created below
              
         my $ns = "DateTime::Format::Human::Duration::Locale::$final";
-        if ( my $code_a = $ns->can('get_human_span_from_units_array') ) {
-            $span->{'locale_cache'}{ $final } = $code_a;
+        # get_human_span_from_units_array has been deprecated, but we'll
+        # still support it.
+        if ( $ns->can('get_human_span_from_units_array') ) {
+            $span->{'locale_cache'}{ $final } = $ns;
         }
-        elsif ( my $code_b = $ns->can('get_human_span_hashref') ) {
-            $span->{'locale_cache'}{ $final } = $code_b->();
+        elsif ( $ns->can('get_human_span_from_units') ) {
+            $span->{'locale_cache'}{ $final } = $ns;
+        }
+        elsif ( my $sub = $ns->can('get_human_span_hashref') ) {
+            $span->{'locale_cache'}{ $final } = $sub->();
         }
          
         if ( exists $span->{'locale_cache'}{ $final } ) {

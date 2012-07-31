@@ -6,6 +6,8 @@ require DateTime::Format::Human::Duration::Locale;
 
 our $VERSION = '0.52';
 
+use Carp qw/croak/;
+
 sub new {
     bless { 'locale_cache' => {} }, 'DateTime::Format::Human::Duration';  
 }
@@ -23,15 +25,30 @@ sub format_duration_between {
 
 sub format_duration {
     my ($span, $duration, %args) = @_;
+    
+    my @default_units = qw(years months weeks days hours minutes seconds nanoseconds);
 
-    my @raw = $duration->in_units( qw(years months weeks days hours minutes seconds nanoseconds) ); 
-    my @n = map { abs($_) } @raw; # no negative numbers
+    my @units = $args{'units'} ? @{ $args{'units'} } : @default_units;
+    if ($args{'precision'}) {
+        # Reduce time resolution to requested precision
+        for (my $i = 0; $i < scalar(@units); $i++) {
+            next unless ($units[$i] eq $args{'precision'});
+            splice(@units, $i + 1);
+        }
+        croak('Useless precision') unless (@units);
+    }
+
+    my @duration_vals = $duration->in_units( @units ); 
+    my $i = 0;
+    my %duration_vals = map { ($_ => $duration_vals[$i++]) } @units;
+    my %positive_duration_vals = map { ($_ => abs $duration_vals{$_}) } keys %duration_vals;
+
     my $say = '';
     
     # $dta - $dtb:
     #   if dta < dtb means past -> future (Duration units will have negatives)
     #   else its either this absolute instant (no_time) or the past
-    if ( grep { $_ < 0 } @raw ) {
+    if ( grep { $_ < 0 } @duration_vals ) {
         if ( exists $args{'future'} ) {
             $say = $args{'future'}    
         }        
@@ -76,27 +93,30 @@ sub format_duration {
                 %{ $locale },
             );            
         }
-        elsif ( ref $locale eq 'CODE') {
-            return $locale->( @n, \%args );
+        # get_human_span_from_units_array is deprecated, but we will still
+        # support it.
+        elsif ( my $get1 = $locale->can('get_human_span_from_units_array') ) {
+            my @n = map { $positive_duration_vals{$_} } @default_units;
+            return $get1->( @n, \%args );
+        }
+        elsif ( my $get2 = $locale->can('get_human_span_from_units') ) {
+            return $get2->( \%duration_vals, \%args );
         }
     }
 
-    # this is what a locale's get_human_span_from_units_array() should do:
-    # my (@n, $args_hr) = @_;
+    my @parts;
+    for my $unit (@units) {
+        my $val = $positive_duration_vals{$unit};
+        next unless $val;
 
-    # reorder @n use if appropriate for locale
-    # @n has been pass through abs() so that its never negative
-    my @parts = grep { $_ } (
-        $n[0] ? ( $n[0]. ' ' . ($n[0] == 1 ? $setup->{'year'}   : $setup->{'years'})) : '',  
-        $n[1] ? ( $n[1] . ' ' .($n[1] == 1 ? $setup->{'month'}  : $setup->{'months'})) : '',
-        $n[2] ? ( $n[2] . ' ' .($n[2] == 1 ? $setup->{'week'}   : $setup->{'weeks'})) : '',
-        $n[3] ? ( $n[3] . ' ' .($n[3] == 1 ? $setup->{'day'}    : $setup->{'days'})) : '',
-        $n[4] ? ( $n[4] . ' ' .($n[4] == 1 ? $setup->{'hour'}   : $setup->{'hours'})) : '', 
-        $n[5] ? ( $n[5] . ' ' .($n[5] == 1 ? $setup->{'minute'} : $setup->{'minutes'})) : '', 
-        $n[6] ? ( $n[6] . ' ' .($n[6] == 1 ? $setup->{'second'} : $setup->{'seconds'})) : '',  
-        $n[7] ? ( $n[7] . ' ' .($n[7] == 1 ? $setup->{'nanosecond'} : $setup->{'nanoseconds'})) : '',   
-    );
+        my $setup_key = $unit;
+        if ($val == 1) {
+            $setup_key =~ s/s$//;
+        }
 
+        push(@parts, $val . ' ' . $setup->{$setup_key});
+    }
+    
     my $no_time = exists $args{'no_time'} ? $args{'no_time'} : $setup->{'no_time'};
     return $no_time if !@parts;
 
@@ -170,13 +190,13 @@ After that you can optionally pass some 'standard args' as a hash as described b
 
 =over 4
 
-=item 1 'locale' 
+=item 1. 'locale' 
 
 locale of the $dt object will be used if you do not specify this
 
 Valid values are a string of the locale (E.g 'fr'), a DateTime object, or a DateTime object's 'locale' key.
 
-=item 2 since we're working with 2 datetime objects of known points we can have past and future tenses.
+=item 2. Since we're working with 2 DateTime objects of known points we can have past and future tenses.
 
 =over 4
 
@@ -194,7 +214,7 @@ Override the 'no_time' in the locale hash.
 
 =back
 
-If duration is baseless (IE ambiguouse) then 'past' and 'future' is used based on if $dur->in_units has negatives or not.
+If duration is baseless (IE ambiguous) then 'past' and 'future' is used based on if $dur->in_units has negatives or not.
 
 Also by nature it's not split into type groups:
 
@@ -205,8 +225,6 @@ An example is
 Will result in '62 seconds' not '1 minute and 2 seconds'
 
 For more sane results always be specific by using 2 datetime object to get a duration object
-
-=back
 
     print $dt->format_duration_between(
         $dta,
@@ -219,6 +237,44 @@ For more sane results always be specific by using 2 datetime object to get a dur
 This facilitates, for example, this L<Locale::Maketext> vernacular which becomes:
 
    'Your account [duration,_1,_2,expired %s ago,expires in,just expired].' => '[Votre compte [duration,_1,_2,a expiré il ya,expire dans,vient d'expirer].'
+
+=item 3. Time Resolution and Units
+
+=over 4
+
+=item * units
+
+Specify units to format duration with. Arguments will be passed to DateTime::Format's in_unit() method.
+
+Example:
+
+    my $fmt = DateTime::Format::Human::Duration->new();
+    my $d = DateTime::Duration->new(...);
+  
+    my $s = $fmt->format_duration($d, 'units' => [qw/years months days/] );
+    # $s == '1 year, 7 months, and 16 days'
+
+Possible values include: years months weeks days hours minutes seconds nanoseconds
+
+=item * precision
+
+By default, the duration will be formatted using nanosecond resolution. Resolution can be reduced by passing
+'years', 'months', 'weeks', 'days', 'hours', 'minutes', or 'seconds' to the 'precision' argument.
+
+Example:
+
+    my $fmt = DateTime::Format::Human::Duration->new();
+    my $d = DateTime::Duration->new(...);
+  
+    print $fmt->format_duration($d);
+    # '1 year, 7 months, 2 weeks, 2 days, 13 hours, 43 minutes, and 15 seconds'
+  
+    print $fmt->format_duration($d, 'precision' => 'days');
+    # '1 year, 7 months, 2 weeks, and 2 days'
+
+=back
+
+=back
 
 =head1 LOCALIZATION
 
@@ -233,21 +289,9 @@ They are setup this way:
 
 DateTime::Format::Human::Duration::Locale::XYZ where 'XYZ' is the ISO code of DateTime::Locale
 
-It can have one of 2 functions used in this order:
+It can have one of 2 functions:
 
 =over 4
-
-=item get_human_span_from_units_array()
-
-Try to use get_human_span_hashref() if the locale is disposed to it since its much easier... That said:
-
-Takes the arguments as described in the example below, should return the localized "span" string.
-
-    sub get_human_span_from_units_array {
-        my ($years, $months, $weeks, $days, $hours, $minutes, $seconds, $nanoseconds, $args_hr) = @_; # note: has no negative numbers
-        ...
-        return $string; # 1 year, 2days, 4 hours, and 17 minutes
-    }
 
 =item get_human_span_hashref()
 
@@ -276,6 +320,20 @@ Takes no arguments, should return a hashref of this structure:
             'nanoseconds' => 'nanosecondes',      
         };
     }
+
+=item get_human_span_from_units()
+
+Try to use L</get_human_span_hashref()> if the locale allows for it since it's much easier. If you cannot, however, then this will give you the maximum level of configurability.
+
+This takes the arguments as described in the example below, should return the localized "span" string.
+
+    sub get_human_span_from_units {
+        my ($duration_values_hr, $args_hr) = @_;
+        ...;
+        return $string; # 1 year, 2days, 4 hours, and 17 minutes
+    }
+
+    Please see the example in C<t/lib/DateTime/Format/Human/Duration/Locale/nb.pm>.
 
 =back
 
@@ -336,7 +394,7 @@ We want to use the so-called Oxford comma to avoid ambiguity.
 
 =head2 My DateTime::Format::Human::Duration::Locale::XX still outputs in English!
 
-That is because it defined neither the get_human_span_hashref() or the get_human_span_from_units_array() functions
+That is because it defined neither the L</get_human_span_hashref()> or the L</get_human_span_from_units()> functions
 
 It must define one of them or defaults are used.
 
