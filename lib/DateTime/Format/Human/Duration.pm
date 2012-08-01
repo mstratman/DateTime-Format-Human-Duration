@@ -178,13 +178,13 @@ Create span object, no args
 
 First argument is a DateTime::Duration object
 
-After that you can optionally pass some 'standard args' as a hash as described below
+After that you can optionally pass some L</standard args> as a hash as described below
 
 =head2 format_duration_between()
 
 First two args are DateTime objects
 
-After that you can optionally pass some 'standard args' as a hash as described below
+After that you can optionally pass some L</standard args> as a hash as described below
 
 =head2 standard args
 
@@ -325,7 +325,7 @@ Takes no arguments, should return a hashref of this structure:
 
 Try to use L</get_human_span_hashref()> if the locale allows for it since it's much easier. If you cannot, however, then this will give you the maximum level of configurability.
 
-This takes the arguments as described in the example below, should return the localized "span" string.
+This function receives a hashref of duration values, and a hashref of the L</standard args>. It should return the localized string.
 
     sub get_human_span_from_units {
         my ($duration_values_hr, $args_hr) = @_;
@@ -333,7 +333,7 @@ This takes the arguments as described in the example below, should return the lo
         return $string; # 1 year, 2days, 4 hours, and 17 minutes
     }
 
-    Please see the example in C<t/lib/DateTime/Format/Human/Duration/Locale/nb.pm>.
+Please see the example in C<t/lib/DateTime/Format/Human/Duration/Locale/nb.pm>.
 
 =back
 
