@@ -1,5 +1,9 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.61   Tue Jan 15 12:51:07 CST 2013
+       * Added 'significant_units' parameter (Tom Hukins).
+         https://github.com/mstratman/DateTime-Format-Human-Duration/pull/2
+
 0.60   Tue Jul 31 13:42:37 CDT 2012
        * Added 'units' and 'precision' arguments (Stephan <au@hcsd.de>)
          https://rt.cpan.org/Ticket/Display.html?id=76497
