@@ -64,6 +64,12 @@ SKIP: {
     is( $span->format_duration($dure, 'locale' => $dub->{'locale'}), '1 minute et 3 seconds', 'locale key as $DateTime->{\'locale\'} format_duration()');
     is( $span->format_duration_between($dub, $duc), '1 minute et 1 seconde', 'Object\'s locale used in format_duration_between()');
 
+    # test 'parts'
+    is( $span->format_duration($dure, parts => 1), '1 minute', 'only show one part' );
+    is( $span->format_duration($dure, parts => 99), '1 minute and 3 seconds', 'show up to 99 part' );
+    is( $span->format_duration($durf, parts => 1), '1 hour', 'show 1 unit of 3' );
+    is( $span->format_duration($durf, parts => 2), '1 hour and 25 seconds', 'show 2 units of 3' );
+    is( $span->format_duration($durf, parts => 3), '1 hour, 25 seconds, and 445499897 nanoseconds', 'show 3 units of 3' );
 };
 
 done_testing();
