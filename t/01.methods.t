@@ -64,12 +64,15 @@ SKIP: {
     is( $span->format_duration($dure, 'locale' => $dub->{'locale'}), '1 minute et 3 seconds', 'locale key as $DateTime->{\'locale\'} format_duration()');
     is( $span->format_duration_between($dub, $duc), '1 minute et 1 seconde', 'Object\'s locale used in format_duration_between()');
 
-    # test 'parts'
-    is( $span->format_duration($dure, parts => 1), '1 minute', 'only show one part' );
-    is( $span->format_duration($dure, parts => 99), '1 minute and 3 seconds', 'show up to 99 part' );
-    is( $span->format_duration($durf, parts => 1), '1 hour', 'show 1 unit of 3' );
-    is( $span->format_duration($durf, parts => 2), '1 hour and 25 seconds', 'show 2 units of 3' );
-    is( $span->format_duration($durf, parts => 3), '1 hour, 25 seconds, and 445499897 nanoseconds', 'show 3 units of 3' );
+    # test 'significant_units'
+    is( $span->format_duration($dure, significant_units => 1), '1 minute', 'only show one significant unit' );
+    is( $span->format_duration($dure, significant_units => 99), '1 minute and 3 seconds', 'show up to 99 significant unit' );
+    is( $span->format_duration($dure, significant_units => 99, units => ['minutes']), '1 minute', 'show up to 99 significant units, with specific units' );
+    is( $span->format_duration($durf, significant_units => 1), '1 hour', 'show 1 unit of 3' );
+    is( $span->format_duration($durf, significant_units => 2), '1 hour and 25 seconds', 'show 2 units of 3' );
+    is( $span->format_duration($durf, significant_units => 3), '1 hour, 25 seconds, and 445499897 nanoseconds', 'show 3 units of 3' );
+    is( $span->format_duration($durf, significant_units => 3, units => ['hours','minutes']), '1 hour', '3 significant_units with specified units of hours and minutes' );
+    is( $span->format_duration($durf, significant_units => 3, units => ['hours','seconds']), '1 hour and 25 seconds', '3 significant_units with specified units of hours and seconds' );
 };
 
 done_testing();

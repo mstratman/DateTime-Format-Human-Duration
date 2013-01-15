@@ -115,8 +115,8 @@ sub format_duration {
         }
 
         push(@parts, $val . ' ' . $setup->{$setup_key});
-        if (exists $args{'parts'}) {
-            last if scalar(@parts) == $args{'parts'};
+        if (exists $args{'significant_units'}) {
+            last if scalar(@parts) == $args{'significant_units'};
         }
     }
     
@@ -275,7 +275,7 @@ Example:
     print $fmt->format_duration($d, 'precision' => 'days');
     # '1 year, 7 months, 2 weeks, and 2 days'
 
-=item * parts
+=item * significant_units
 
 By default, the duration will be formatted using all specified units.  To restrict the number of units output, set this to a value of one or more.
 
@@ -284,11 +284,11 @@ Example:
     my $fmt = DateTime::Format::Human::Duration->new();
     my $d = DateTime::Duration->new(...);
   
-    print $fmt->format_duration($d, 'parts' => 1);
+    print $fmt->format_duration($d, 'significant_units' => 1);
     # '3 days'
-    print $fmt->format_duration($d, 'parts' => 2);
+    print $fmt->format_duration($d, 'significant_units' => 2);
     # '3 days and 10 hours'
-    print $fmt->format_duration($d, 'parts' => 3);
+    print $fmt->format_duration($d, 'significant_units' => 3);
     # '3 days, 10 hours, and 27 minutes'
 
 =back
