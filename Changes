@@ -1,5 +1,6 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.62   Thu Feb  5 03:45:30 CST 2015
        * Added 'ko' localization (Keedi Kim <keedi@cpan.org>)
          https://github.com/mstratman/DateTime-Format-Human-Duration/pull/4
        * Added 'ja' localization (Tomohiro Hosaka <bokutin@bokut.in>)
