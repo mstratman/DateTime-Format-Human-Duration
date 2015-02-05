@@ -1,5 +1,6 @@
 package DateTime::Format::Human::Duration::Locale::ko;
 
+use utf8;
 use strict;
 use warnings;
 
