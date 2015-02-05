@@ -1,5 +1,10 @@
 Revision history for DateTime-Format-Human-Duration
 
+       * Added 'ko' localization (Keedi Kim <keedi@cpan.org>)
+         https://github.com/mstratman/DateTime-Format-Human-Duration/pull/4
+       * Added 'ja' localization (Tomohiro Hosaka <bokutin@bokut.in>)
+         https://github.com/mstratman/DateTime-Format-Human-Duration/pull/3
+
 0.61   Tue Jan 15 12:51:07 CST 2013
        * Added 'significant_units' parameter (Tom Hukins).
          https://github.com/mstratman/DateTime-Format-Human-Duration/pull/2
