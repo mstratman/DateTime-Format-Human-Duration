@@ -46,15 +46,24 @@ sub determine_locale_from {
     return '' if !$args_hr->{'get_locale_from'};
 
     if (ref $args_hr->{'get_locale_from'}) {
-        my $ns = ref($args_hr->{'get_locale_from'});
+	my $locale_obj;
+	if (UNIVERSAL::can($args_hr->{'get_locale_from'}, 'locale')) {
+	    $locale_obj = $args_hr->{'get_locale_from'}->locale;
+	}
+	else {
+	    $locale_obj = $args_hr->{'get_locale_from'};
+	}
 
-        if (exists $args_hr->{'get_locale_from'}{'locale'}) {
-            $ns = exists $args_hr->{'get_locale_from'}{'locale'}{'id'} ? $args_hr->{'get_locale_from'}{'locale'}{'id'} : ref($args_hr->{'get_locale_from'}{'locale'});
-        }
-        elsif ($ns =~ m{^DateTime::Locale::} && exists $args_hr->{'get_locale_from'}{'id'}) {
-            $ns = $args_hr->{'get_locale_from'}{'id'};
-        }
-        ($args_hr->{'get_locale_from'}) = reverse split /::/, $ns;
+	if (UNIVERSAL::can($locale_obj, 'code')) {
+	    $args_hr->{'get_locale_from'} = $locale_obj->code; # DateTime::Locale v1
+	}
+	elsif (UNIVERSAL::can($locale_obj, 'id')) {
+	    $args_hr->{'get_locale_from'} = $locale_obj->id;   # DateTime::Locale v0
+	}
+	else {
+	    my $ns = ref($args_hr->{'get_locale_from'});
+	    ($args_hr->{'get_locale_from'}) = reverse split /::/, $ns;
+	}
     }
     
     my ($short) = split(/[-_]+/,$args_hr->{'get_locale_from'});
