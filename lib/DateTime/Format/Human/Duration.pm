@@ -366,7 +366,7 @@ The idea is to determine the locale to use based on a DateTime object.
 
 XYZ::Locale should handle looking up (and caching if appropriate) the locale and loading the necessary locale module XYZ::Locale::fr
 
-The specific locale module holds the data and possibly logic neccesary to do what XYZ does in the vernacular of the given locale.
+The specific locale module holds the data and possibly logic necessary to do what XYZ does in the vernacular of the given locale.
 
 =head2 TODO 
 
