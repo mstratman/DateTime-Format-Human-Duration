@@ -213,7 +213,7 @@ LOCALIZATION of DateTime::Format modules
     XYZ::Locale should handle looking up (and caching if appropriate) the
     locale and loading the necessary locale module XYZ::Locale::fr
 
-    The specific locale module holds the data and possibly logic neccesary
+    The specific locale module holds the data and possibly logic necessary
     to do what XYZ does in the vernacular of the given locale.
 
   TODO
