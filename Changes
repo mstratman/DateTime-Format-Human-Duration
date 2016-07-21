@@ -1,5 +1,8 @@
 Revision history for DateTime-Format-Human-Duration
 
+0.64   Thu Jul 21 13:55:00 CDT 2016
+       * Updated to reflect recommendation in comment on pull #7
+
 0.63   Thu Jul 21 13:47:16 CDT 2016
        * Added compatibility with newer DateTime::Locale versions,
          for RT #108601

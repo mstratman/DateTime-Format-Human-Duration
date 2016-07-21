@@ -4,7 +4,7 @@ use warnings;
 use strict;
 require DateTime::Format::Human::Duration::Locale;
 
-our $VERSION = '0.63';
+our $VERSION = '0.64';
 
 use Carp qw/croak/;
 
@@ -17,11 +17,12 @@ sub format_duration_between {
     my $dur = $dt - $dtb;
 
     if (!exists $args{'locale'}) {
-	if (UNIVERSAL::can($dt->{'locale'}, 'code')) {
-	    $args{'locale'} = $dt->{'locale'}->code; # DateTime::Locale v1
-	} else {
-	    $args{'locale'} = $dt->{'locale'}->id;   # DateTime::Locale v0
-	}
+        my $locale_obj = $dt->locale;
+        if (UNIVERSAL::can($locale_obj, 'code')) {
+            $args{'locale'} = $locale_obj->code; # DateTime::Locale v1
+        } else {
+            $args{'locale'} = $locale_obj->id;   # DateTime::Locale v0
+        }
     }
     
     return $span->format_duration($dur, %args);    
